@@ -26,7 +26,7 @@
 //!     match matched {
 //!         Some(res) => {
 //!             match res {
-//!                 Ok(substr) => println!("Match {i}: '{}'", substr),
+//!                 Ok(substr) => println!("Match {i}: '{:?}'", substr),
 //!                 Err(e) => println!("Match {i}: <Error: {e}>"),
 //!             }
 //!         },
@@ -53,7 +53,7 @@
 //!     match matched {
 //!         Some(res) => {
 //!             match res {
-//!                 Ok(substr) => println!("Match {i}: '{}'", substr),
+//!                 Ok(substr) => println!("Match {i}: '{:?}'", substr),
 //!                 Err(e) => println!("Match {i}: <Error: {e}>"),
 //!             }
 //!         },

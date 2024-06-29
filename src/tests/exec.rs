@@ -27,7 +27,7 @@ fn regexec_works() {
     };
     assert!(result[0].is_some());
     assert!(result[0].as_ref().unwrap().is_ok());
-    assert_eq!(*result[0].as_ref().unwrap().as_ref().unwrap(), "hello");
+    assert_eq!(*result[0].as_ref().unwrap().as_ref().unwrap(), ("hello", 0, 5));
     assert!(result[1].is_none());
 }
 
@@ -42,7 +42,7 @@ fn regexec_bytes_works() {
         panic!("regexec_bytes");
     };
     assert!(result[0].is_some());
-    assert_eq!(result[0].as_ref().unwrap().as_ref(), b"hello");
+    assert_eq!(result[0].as_ref().unwrap().0, b"hello");
     assert!(result[1].as_ref().is_none());
 }
 
@@ -61,9 +61,9 @@ fn regex_multibyte_works() {
     assert!(result[0].as_ref().unwrap().is_ok());
     assert_eq!(
         *result[0].as_ref().unwrap().as_ref().unwrap(),
-        "私の名前はエリザベスです"
+        ("私の名前はエリザベスです", 0, 36)
     );
     assert!(result[1].is_some());
     assert!(result[1].as_ref().unwrap().is_ok());
-    assert_eq!(*result[1].as_ref().unwrap().as_ref().unwrap(), "エリザベス");
+    assert_eq!(result[1].as_ref().unwrap().as_ref().unwrap().0, "エリザベス");
 }

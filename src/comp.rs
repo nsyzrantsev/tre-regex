@@ -36,7 +36,7 @@ impl Regex {
     ///     match matched {
     ///         Some(res) => {
     ///             match res {
-    ///                 Ok(substr) => println!("Match {i}: '{}'", substr),
+    ///                 Ok(substr) => println!("Match {i}: '{:?}'", substr),
     ///                 Err(e) => println!("Match {i}: <Error: {e}>"),
     ///             }
     ///         },
@@ -80,7 +80,7 @@ impl Regex {
     ///     match matched {
     ///         Some(res) => {
     ///             match res {
-    ///                 Ok(substr) => println!("Match {i}: '{}'", substr),
+    ///                 Ok(substr) => println!("Match {i}: '{:?}'", substr),
     ///                 Err(e) => println!("Match {i}: <Error: {e}>"),
     ///             }
     ///         },
@@ -145,7 +145,7 @@ impl Regex {
 ///     match matched {
 ///         Some(substr) => {
 ///             match substr {
-///                 Ok(substr) => println!("Match {i}: '{}'", substr),
+///                 Ok(substr) => println!("Match {i}: '{:?}'", substr),
 ///                 Err(e) => println!("Match {i}: <Error: {e}>"),
 ///             }
 ///         },
@@ -190,7 +190,7 @@ pub fn regcomp(reg: &str, flags: RegcompFlags) -> Result<Regex> {
 /// for (i, matched) in matches.into_iter().enumerate() {
 ///     match matched {
 ///         Some(substr) => println!("Match {i}: '{}'",
-///             std::str::from_utf8(substr.as_ref()).unwrap()
+///             std::str::from_utf8(substr.0).unwrap()
 ///         ),
 ///         None => println!("Match {i}: <None>"),
 ///     }
