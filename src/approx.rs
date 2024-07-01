@@ -8,7 +8,7 @@ use crate::{
 };
 
 pub type RegApproxMatchStr<'a> = RegApproxMatch<&'a str, Result<Cow<'a, str>>>;
-pub type RegApproxMatchBytes<'a> = RegApproxMatch<&'a [u8], Cow<'a, [u8]>>;
+pub type RegApproxMatchBytes<'a> = RegApproxMatch<&'a [u8], (Cow<'a, [u8]>, usize, usize)>;
 
 /// Regex params passed to approximate matching functions such as [`regaexec`]
 #[cfg(feature = "approx")]
@@ -258,7 +258,7 @@ impl Regex {
             };
 
             #[allow(clippy::match_wildcard_for_single_variants)]
-            result.push(Some(match pmatch {
+            result.push(Some(match pmatch.0 {
                 Cow::Borrowed(pmatch) => match std::str::from_utf8(pmatch) {
                     Ok(s) => Ok(s.into()),
                     Err(e) => Err(RegexError::new(
@@ -334,7 +334,7 @@ impl Regex {
     ///     match matched {
     ///         Some(substr) => println!(
     ///             "Match {i}: {}",
-    ///             std::str::from_utf8(substr).unwrap()
+    ///             std::str::from_utf8(&substr.0).unwrap()
     ///         ),
     ///         None => println!("Match {i}: <None>"),
     ///     }
@@ -380,7 +380,7 @@ impl Regex {
             return Err(self.regerror(result));
         }
 
-        let mut result: Vec<Option<Cow<'a, [u8]>>> = Vec::with_capacity(nmatches);
+        let mut result: Vec<Option<(Cow<'a, [u8]>, usize, usize)>> = Vec::with_capacity(nmatches);
         for pmatch in match_vec {
             if pmatch.rm_so < 0 || pmatch.rm_eo < 0 {
                 result.push(None);
@@ -393,7 +393,7 @@ impl Regex {
             #[allow(clippy::cast_sign_loss)]
             let end_offset = pmatch.rm_eo as usize;
 
-            result.push(Some(Cow::Borrowed(&data[start_offset..end_offset])));
+            result.push(Some((Cow::Borrowed(&data[start_offset..end_offset]), start_offset, end_offset)));
         }
 
         Ok(RegApproxMatchBytes::new(data, result, amatch))
@@ -537,7 +537,7 @@ pub fn regaexec<'a>(
 ///     match matched {
 ///         Some(substr) => println!(
 ///             "Match {i}: {}",
-///             std::str::from_utf8(substr).unwrap()
+///             std::str::from_utf8(&substr.0).unwrap()
 ///         ),
 ///         None => println!("Match {i}: <None>"),
 ///     }
